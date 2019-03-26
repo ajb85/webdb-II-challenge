@@ -58,4 +58,20 @@ routes.get("/:id", async (req, res) => {
   }
 });
 
+routes.delete("/:id", async (req, res) => {
+  try {
+    const count = await db("zoos")
+      .where({ id: req.params.id })
+      .del();
+    count
+      ? res.status(204).end()
+      : res.status(404).json({ message: "No zoo with that ID" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "There was an error deleting that ID" });
+  }
+});
+
+routes.put("/:id", async (req, res) => {});
+
 module.exports = routes;

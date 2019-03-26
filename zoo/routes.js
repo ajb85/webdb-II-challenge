@@ -72,6 +72,27 @@ routes.delete("/:id", async (req, res) => {
   }
 });
 
-routes.put("/:id", async (req, res) => {});
+routes.put("/:id", async (req, res) => {
+  try {
+    if (
+      req.body.hasOwnProperty("name") &&
+      req.body.name.toString().length > 0
+    ) {
+      const count = await db("zoos")
+        .where({ id: req.params.id })
+        .update(req.body);
+      count
+        ? res.status(200).end()
+        : res.status(404).json({ message: "No zoo with that ID" });
+    } else {
+      res
+        .status(400)
+        .json({ message: "I need a name included with the put request." });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "There was an error updating that zoo" });
+  }
+});
 
 module.exports = routes;

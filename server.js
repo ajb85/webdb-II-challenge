@@ -1,24 +1,15 @@
 const express = require("express");
 const helmet = require("helmet");
-const knex = require("knex");
-
-const knexConfig = {
-  client: sqlite3,
-  useNullAsDefault: true,
-  connection: {
-    filename: "./data/lambda.sqlite3"
-  }
-};
-
-server.get("/", (req, res) => {
-  res.status(200).send("OK");
-});
-
-const db = knex(knexConfig);
+const zooRoutes = require("./zoo/routes.js");
 
 const server = express();
 
 server.use(express.json());
 server.use(helmet());
 
-export default server;
+server.get("/", (req, res) => {
+  res.status(200).send("OK");
+});
+
+server.use("/api/zoos", zooRoutes);
+module.exports = server;
